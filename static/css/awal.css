@@ -1,0 +1,61 @@
+/* Reset default margin and padding */
+body, h1, h2, h3, p, a {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set default font and background */
+body {
+    font-family: 'Poppins';
+    background-color: #cceef0;
+}
+
+/* Container style */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Next button style */
+.kotak {
+    
+    background-color: #368a99;
+    padding: 15px 30px;
+    border-radius: 20px;
+    margin-top: 50px;
+    left: 830px;
+    width: 50px;
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+.kotak p {
+    color: #eff7f7;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.kotak:hover {
+    
+    background-color: #094752;
+}
+
+/* Heading style */
+h3 {
+    margin-top: 80px;
+    font-size: 26px;
+    color: #368a99;
+}
+
+img[src*="c.jpg"] {
+    
+    border-radius: 20px;
+    left: 550px;
+    margin-top: 40px;
+}
+.logo{
+    position: fixed;
+}
