@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/roll blind.css') }}">
+    <title>SMART CLASSROOM</title>
+</head>
+
+<body>
+    <img src="{{ url_for('static', filename='images/c.jpg') }}" alt="logo" width="80px"/>
+    <div class="container">
+    <h1>Kontrol Roll Blind</h1>
+
+            <form method="POST">
+                 <input type="range" name="slider_value" min="1" max="100">
+                 <input type="submit" value="Send">
+            
+                <button type="submit" name="button" value="toggle" class="custom-button {% if current_value == 1 %}on{% endif %}">
+                    {% if current_value == 1 %}
+                    <img src="{{ url_for('static', filename='images/tombol.png') }}" alt="" width="40px" height="40px">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/tombol.png') }}" alt="" width="40px" height="40px">
+                    {% endif %}
+                </button>
+            </form>
+            <p>Current value: {{ current_value }}</p>
+        <a href="/menu">
+            <div class="kotak">
+            <p>BACK</p>
+            </div></a>
+    </div>
+</body>
+
+</html>

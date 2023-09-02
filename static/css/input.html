@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>SMART CLASSROOM</title>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/c.jpg') }}" alt="logo" width="80px" />
+    <div class="container">
+        <h1>Input Kehadiran Guru</h1>
+        <form id="attendanceForm" action="/save_attendance" method="post">
+            
+
+            <label for="date">Tanggal:</label>
+            <input type="date" id="date" name="date" required><br>
+
+            <label for="name">Nama Guru:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="subject">Mata Pelajaran:</label>
+            <input type="text" id="subject" name="subject" required><br>
+
+            <label for="classroom">Kelas:</label>
+            <input type="text" id="classroom" name="classroom" required><br>
+
+<button type="button" id="saveButton">Simpan</button>
+<a href="/submenu">
+    <div class="kotak">
+    <p>BACK</p>
+    </div></a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("attendanceForm");
+        const saveButton = document.getElementById("saveButton");
+        
+        saveButton.addEventListener("click", function () {
+            const formData = new FormData(form);
+            
+            fetch("/save_attendance", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/attendance";
+                }
+            });
+        });
+    });
+</script>
+
+
+        </form>
+    </div>
+</body>
+</html>
