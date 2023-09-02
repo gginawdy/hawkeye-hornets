@@ -1,0 +1,281 @@
+import RPi.GPIO as GPIO # untuk mengendalikan pin GPIO pada rasberry pi
+import time 
+import threading
+from ubidots import ApiClient
+import Adafruit_DHT
+
+
+ldr_pin = 15
+LED1_pin = 2
+LED2_pin = 3
+trigger1_pin = 21
+echo1_pin = 23
+trigger2_pin = 20
+echo2_pin = 25
+relay_kipas1 = 26
+relay_kipas2 = 8
+# Konfigurasi pin sensor DHT11
+dht = Adafruit_DHT.DHT11
+dht_pin = 18
+IN1 = 5
+IN2 = 6
+IN3 = 13
+IN4 = 19
+
+# Tentukan kecepatan motor (dalam detik)
+speed = 0.001
+
+# Tentukan urutan langkah untuk motor unipolar
+step_sequence = [
+    [1, 0, 0, 0],
+    [1, 1, 0, 0],
+    [0, 1, 0, 0],
+    [0, 1, 1, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 1],
+    [0, 0, 0, 1],
+    [1, 0, 0, 1]
+]
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(ldr_pin, GPIO.IN)
+GPIO.setup(LED1_pin, GPIO.OUT)
+GPIO.setup(LED2_pin, GPIO.OUT)
+GPIO.setup(trigger1_pin, GPIO.OUT)
+GPIO.setup(echo1_pin, GPIO.IN)
+GPIO.setup(trigger2_pin, GPIO.OUT)
+GPIO.setup(echo2_pin, GPIO.IN)
+GPIO.setup(relay_kipas1, GPIO.OUT)
+GPIO.setup(relay_kipas2, GPIO.OUT)
+GPIO.setup(IN1, GPIO.OUT)
+GPIO.setup(IN2, GPIO.OUT)
+GPIO.setup(IN3, GPIO.OUT)
+GPIO.setup(IN4, GPIO.OUT)
+
+api_ubidots = ApiClient(token='BBFF-thUhhRPJojoHiUB78bozuZuPy2dKTv')
+suhu_variable = api_ubidots.get_variable('64d1f8688168b81f91e73389')
+kelembapan_variable = api_ubidots.get_variable('64d1f8719e57a7000b988942')
+
+def read_ldr():
+    # Wait for the LDR to stabilize
+    time.sleep(1)
+    ldr = GPIO.input(ldr_pin)
+    # Read the LDR value
+    return ldr
+
+def measure_distance():
+    GPIO.output(trigger1_pin, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(trigger1_pin, GPIO.LOW)
+
+    start_time = time.time()
+    stop_time = time.time()
+
+    while GPIO.input(echo1_pin) == 0:
+        start_time = time.time()
+
+    while GPIO.input(echo1_pin) == 1:
+        stop_time = time.time()
+    
+    elapsed_time = stop_time - start_time
+    distance1 = (elapsed_time * 34300) / 2
+
+    GPIO.output(trigger2_pin, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(trigger2_pin, GPIO.LOW)
+
+    start_time = time.time()
+    stop_time = time.time()
+
+    while GPIO.input(echo2_pin) == 0:
+        start_time = time.time()
+
+    while GPIO.input(echo2_pin) == 1:
+        stop_time = time.time()
+
+    elapsed_time = stop_time - start_time
+    distance2 = (elapsed_time * 34300) / 2  # Kecepatan suara sekitar 343 m/s
+    return distance1, distance2
+
+def lampu_otomatis():
+    data_ldr = read_ldr()
+    print("sensor ldr:", data_ldr)
+    
+    data_ultrasonic1, data_ultrasonic2 = measure_distance()
+    print("sensor_ultrasonic1:", data_ultrasonic1 )
+    print("sensor_ultrasonic2:", data_ultrasonic2 )
+
+    LED_variable = api_ubidots.get_variable('64cb734bdfc2f3000b9aec5b')
+    LED_value = LED_variable.get_values(1)[0]['value']
+
+    if LED_value == 0:
+        if data_ldr == 0 and data_ultrasonic1 <20 and data_ultrasonic2 >20:
+            GPIO.output(LED1_pin, GPIO.HIGH)
+            GPIO.output(LED2_pin, GPIO.LOW)
+            print("lampu 1 menyala")
+        elif data_ldr == 0 and data_ultrasonic1 >20 and data_ultrasonic2 <20:
+            GPIO.output(LED1_pin, GPIO.LOW)
+            GPIO.output(LED2_pin, GPIO.HIGH)
+            print("lampu 2 menyala")
+        elif data_ldr == 0 and data_ultrasonic1 <20 and data_ultrasonic2 <20:
+            GPIO.output(LED1_pin, GPIO.HIGH)
+            GPIO.output(LED2_pin, GPIO.HIGH)
+            print("lampu 1 dan 2 menyala")
+        else:
+            GPIO.output(LED1_pin, GPIO.LOW)
+            GPIO.output(LED2_pin, GPIO.LOW)
+            print("lampu mati") 
+    else:
+        GPIO.output(LED1_pin, GPIO.HIGH)
+        GPIO.output(LED2_pin, GPIO.HIGH)
+        print("lampu 1 dan 2 menyala")
+
+def read_dht():
+    kelembapan, suhu = Adafruit_DHT.read_retry(dht, dht_pin)
+
+    return suhu, kelembapan
+
+def kipas_otomatis():
+    data_ultrasonic1, data_ultrasonic2 = measure_distance()
+
+    suhu, kelembapan = read_dht()
+    print(f"Suhu: {suhu}°C")
+    print(f"Kelembaban: {kelembapan}%")
+
+    KIPAS_variable = api_ubidots.get_variable('64cc7d13b2f3f5000e41c9d1')
+    KIPAS_value = KIPAS_variable.get_values(1)[0]['value']
+    
+    if kelembapan is not None and suhu is not None:
+        suhu_variable.save_value({'value': suhu})
+        kelembapan_variable.save_value({'value': kelembapan})
+        if KIPAS_value == 0:
+            if suhu > 25:
+                if data_ultrasonic1 < 20 and data_ultrasonic2 > 20:
+                    GPIO.output(relay_kipas1, GPIO.LOW)
+                    GPIO.output(relay_kipas2, GPIO.HIGH)
+                    print("kipas 1 menyala")
+                elif data_ultrasonic1 > 20 and data_ultrasonic2 < 20:
+                    GPIO.output(relay_kipas1, GPIO.HIGH)
+                    GPIO.output(relay_kipas2, GPIO.LOW)
+                    print("kipas 2 menyala")
+                elif data_ultrasonic1 < 20 and data_ultrasonic2 < 20:
+                    GPIO.output(relay_kipas1, GPIO.LOW)
+                    GPIO.output(relay_kipas2, GPIO.LOW)
+                    print("kipas 1 dan kipas 2 menyala")
+                else:
+                    GPIO.output(relay_kipas1, GPIO.HIGH)
+                    GPIO.output(relay_kipas2, GPIO.HIGH)
+                    print("kipas mati") 
+            else:
+                GPIO.output(relay_kipas1, GPIO.HIGH)
+                GPIO.output(relay_kipas2, GPIO.HIGH)
+                print("kipas mati") 
+        else:
+            GPIO.output(relay_kipas1, GPIO.LOW)
+            GPIO.output(relay_kipas2, GPIO.LOW)
+            print("kipas 1 dan 2 menyala")
+    else:
+        print("Gagal membaca sensor DHT11.")
+
+# Fungsi untuk menggerakkan motor stepper
+def move(steps, direction):
+    # Tentukan urutan langkah motor sesuai arah
+    if direction == "right":
+        sequence = step_sequence
+    elif direction == "left":
+        sequence = step_sequence[::-1]  # Urutan langkah dibalik
+
+    # Looping untuk jumlah langkah yang ditentukan
+    for _ in range(steps):
+        for step in sequence:
+            # Mengatur pin GPIO sesuai urutan langkah
+            GPIO.output(IN1, step[0])
+            GPIO.output(IN2, step[1])
+            GPIO.output(IN3, step[2])
+            GPIO.output(IN4, step[3])
+            time.sleep(speed)
+
+def update_gorden_status(value):
+    ROLL_BLIND_BUTTON_variable = api_ubidots.get_variable('64d1f43ae26c5fcc5a9e7fb3')
+    ROLL_BLIND_BUTTON_variable.save_value({'value': value})
+
+def update_gorden_position(value):
+    ROLL_BLIND_POSITION_variable = api_ubidots.get_variable('64cc7d2b97713e000da27763')
+    ROLL_BLIND_POSITION_variable.save_value({'value': value})
+
+def main_program():
+    try:
+        prev_ldr_value = None
+        ROLL_BLIND_variable = api_ubidots.get_variable('64cc7d2b97713e000da27763')
+        ROLL_BLIND_value = ROLL_BLIND_variable.get_values(1)[0]['value']
+        prev_stepper_position = ROLL_BLIND_value
+
+        while True:
+            # Baca nilai tombol gorden otomatis dari Ubidots
+            ROLL_BLIND_BUTTON_variable = api_ubidots.get_variable('64d1f43ae26c5fcc5a9e7fb3')
+            ROLL_BLIND_BUTTON_value = ROLL_BLIND_BUTTON_variable.get_values(1)[0]['value']
+
+            # Baca nilai slider gorden dari Ubidots
+            ROLL_BLIND_variable = api_ubidots.get_variable('64cc7d2b97713e000da27763')
+            ROLL_BLIND_value = ROLL_BLIND_variable.get_values(1)[0]['value']
+            lamp_thread = threading.Thread(target=lampu_otomatis)
+            kipas_thread = threading.Thread(target=kipas_otomatis)
+            
+            lamp_thread.start()
+            kipas_thread.start()
+
+            lamp_thread.join()
+            kipas_thread.join()
+
+            lampu_otomatis()
+            kipas_otomatis()
+            ldr_value = read_ldr()
+
+            if ROLL_BLIND_BUTTON_value == 1:
+                # Mode manual (slider)
+                if ROLL_BLIND_value != prev_stepper_position:
+                    arah_gorden = int(ROLL_BLIND_value - prev_stepper_position) *50 # (Posisi slider - posisi gorden)x50
+                    if arah_gorden < 0 :
+                        prev_stepper_position = ROLL_BLIND_value # jumlah langkah buat gerakin motor stepper harus positif,
+                        print("menutup gorden ke posisi ", prev_stepper_position)
+                        move(abs(arah_gorden), "left") # abs buat ngubah arah gorden(negatif) menjadi positif 
+                    else:
+                        prev_stepper_position = ROLL_BLIND_value # if dan else buat nentuin arah gorden, buat gerakin arah motor butuh arah langkah kemana dan jumlah langkah berapa
+                        print("membuka gorden ke posisi ", prev_stepper_position)
+                        move(arah_gorden, "right")
+
+                    update_gorden_status(1)  # Mematikan tombol otomatis
+
+            elif ROLL_BLIND_BUTTON_value == 0:
+                if prev_ldr_value is None or ldr_value != prev_ldr_value:
+                    if ldr_value == GPIO.LOW:  # Jika sensor mendeteksi cahaya (siang)
+                        print("Sensor LDR mendeteksi cahaya. Membuka gorden.")
+                        steps = 5000  # Jumlah langkah yang diinginkan untuk membuka gorden
+                        move(steps, "right")
+                        prev_stepper_position = 100
+                    else:  # Jika sensor tidak mendeteksi cahaya (malam)
+                        print("Sensor LDR tidak mendeteksi cahaya. Menutup gorden.")
+                        steps = 5000  # Jumlah langkah yang diinginkan untuk menutup gorden
+                        move(steps, "left")
+                        prev_stepper_position = 0
+
+                    update_gorden_position(prev_stepper_position)
+
+                    prev_ldr_value = ldr_value
+                    update_gorden_status(0)  # Mengaktifkan tombol otomatis
+
+
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        print("Program dihentikan.")
+        GPIO.cleanup()
+
+# Memanggil fungsi utama
+if _name_ == "_main_":
+    api_ubidots = ApiClient(token='BBFF-thUhhRPJojoHiUB78bozuZuPy2dKTv')
+    suhu_variable = api_ubidots.get_variable('64d1f8688168b81f91e73389')
+    kelembapan_variable = api_ubidots.get_variable('64d1f8719e57a7000b988942')
+    
+    main_program()
