@@ -235,7 +235,7 @@ def main_program():
             if ROLL_BLIND_BUTTON_value == 1:
                 # Mode manual (slider)
                 if ROLL_BLIND_value != prev_stepper_position:
-                    arah_gorden = int(ROLL_BLIND_value - prev_stepper_position) *50 # (Posisi slider - posisi gorden)x50
+                    arah_gorden = int(ROLL_BLIND_value - prev_stepper_position) *35 # (Posisi slider - posisi gorden)x50
                     if arah_gorden < 0 :
                         prev_stepper_position = ROLL_BLIND_value # jumlah langkah buat gerakin motor stepper harus positif,
                         print("menutup gorden ke posisi ", prev_stepper_position)
