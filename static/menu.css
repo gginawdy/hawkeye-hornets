@@ -1,0 +1,182 @@
+/* Reset default margin and padding */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #315869;
+}
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Poppins';
+    margin-top: 100px;
+    text-align: center;
+}
+
+img[src*="c.jpg"] {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 80px;
+    border-radius: 20px;
+}
+
+.pilih.menu h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    color: #fcfbf9;
+    border: 3px solid #0d0e0e;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    margin: 15px;
+    width: 500px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color:rgb(47, 88, 112) /* Latar belakang kotak absen */
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Kotak Absen */
+.absen {
+    border: 3px solid #f7f8f8;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    margin: 15px;
+    width: 300px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color:rgb(167, 189, 197) /* Latar belakang kotak absen */
+    
+}
+
+.absen:hover {
+    background-color: #8da9c4; /* Warna latar belakang saat hover */
+}
+
+/* Kotak Lampu */
+.lampu {
+    border: 3px solid #f7f8f8;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    margin: 15px;
+    width: 300px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color: rgb(167, 189, 197); /* Latar belakang kotak lampu */
+}
+
+.lampu:hover {
+    background-color: #8da9c4; /* Warna latar belakang saat hover */
+}
+
+/* Kotak Kipas */
+.kipas {
+    border: 3px solid #f7f8f8;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    margin: 15px;
+    width: 300px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color: rgb(167, 189, 197); /* Latar belakang kotak kipas */
+}
+
+.kipas:hover {
+    background-color: #8da9c4; /* Warna latar belakang saat hover */
+}
+
+/* Kotak Roll Blind */
+.roll.blind {
+    border: 3px solid #f7f8f8;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    margin: 15px;
+    width: 300px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color: rgb(167, 189, 197); /* Latar belakang kotak roll blind */
+}
+
+.roll.blind:hover {
+    background-color: #8da9c4; /* Warna latar belakang saat hover */
+}
+
+
+.kotak {
+    background-color: #a19f3b;
+    color: #131212;
+    border: 3px solid #084e52;
+    padding: 10px;
+    text-align: center;
+    margin: 10px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 10px;
+    height: 20px;
+    width: 100px;
+    display: inline-block;
+}
+
+.kotak p {
+    font-weight: bold;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+@media (max-width: 768px) {
+    .checkbtn {
+        display: block;
+    }
+
+    nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        width: 100%;
+        background-color: #7cc506;
+        text-align: center;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+}
+#menu {
+    position: absolute;
+    top: 50px;
+    left: 30px;
+    width: 50px;
+    border-radius: 0px;
+}
+
+/* ... (your existing styles) ... */

@@ -1,0 +1,74 @@
+/* Your existing CSS code goes here */
+/* ... */
+
+/* Additional CSS for horizontal menu */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    background-color: #cceef0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Mengatur tata letak ke vertikal */
+    align-items: center; /* Mengatur konten di tengah secara horizontal */
+    justify-content: center; /* Mengatur konten di tengah secara vertikal */
+    height: 100vh; /* Mengisi tinggi layar */
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column; /* Menyusun menu secara vertikal */
+    align-items: center; /* Mengatur menu di tengah secara horizontal */
+    gap: 20px; /* Mengatur jarak antara menu */
+}
+
+.menu-item {
+    margin: 10px 0;
+}
+
+.menu-item a {
+    display: block;
+    text-decoration: none;
+    padding: 20px 40px;
+    border: 5px solid #f7f7f8;
+    border-radius: 30px;
+    color: #f9fafa;
+    background-color: #338097;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+    font-size: 23px;
+}
+
+
+.menu-item a:hover {
+    background-color: #29696b;
+    color: #fff;
+}
+
+img[src*="c.jpg"] {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 80px;
+    border-radius: 20px;
+}
+
+.kotak {
+    position: absolute;
+    background-color: #a3e3ee;
+    padding: 10px 15px;
+    border-radius: 20px;
+    top: 500px; /* Atur top sesuai keinginan Anda */
+    left: 50px; /* Atur left sesuai keinginan Anda */
+    display: inline-block;
+    cursor: pointer;
+    border: 4px solid #1e768b;
+}
+
+
+.kotak p {
+    color: #141414;
+    font-weight: bold;
+    font-size: 20px;
+}

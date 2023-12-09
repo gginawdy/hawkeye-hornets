@@ -1,0 +1,129 @@
+/* styles.css */
+body {
+    font-family: 'Poppins';
+    margin: 0;
+    padding: 0;
+    background-color: #cceef0; /* Warna latar belakang yang diubah */
+}
+
+.container {
+    width: 55%;
+    margin: auto;
+    margin-top: 80px;
+    padding: 20px;
+    background-color: #8ec5d6;
+    border-radius: 10px;
+    box-shadow: 7px 7px 10px rgb(248, 246, 246);
+}
+
+h1 {
+    color: #080808;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"] {
+    width: 77%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="button"] {
+    background-color: #194f8ae1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+img[src*="c.jpg"] {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 80px;
+    border-radius: 20px;
+}
+.kotak {
+    position: absolute;
+    background-color: #368a99;
+    padding: 3px 10px;
+    border-radius: 20px;
+    bottom: 20px;
+    left: 10%;
+    transform: translateX(-50%);
+    display: inline-block;
+    cursor: pointer;
+}
+
+.kotak p {
+    color: #eff7f7;
+    font-weight: bold;
+    font-size: 20px;
+}
+.select-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+label {
+    font-weight: bold;
+    flex: 1; /* Kolom label akan memakan sebanyak mungkin lebar yang tersedia */
+}
+
+select {
+    width: 80%; /* Mengisi seluruh lebar kolom select */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* styles.css */
+/* ... Kode CSS sebelumnya ... */
+
+/* Atur ukuran kotak filter untuk Nama Guru */
+#filter_name {
+    width: 90px; /* Ganti ukuran sesuai kebutuhan Anda */
+}
+
+/* Atur ukuran kotak filter untuk Mata Pelajaran */
+#filter_subject {
+    width: 90px; /* Ganti ukuran sesuai kebutuhan Anda */
+}
+
+/* Atur ukuran kotak filter untuk Kelas */
+#filter_classroom {
+    width: 90px; /* Ganti ukuran sesuai kebutuhan Anda */
+}
+
+/* ... Kode CSS setelahnya ... */
