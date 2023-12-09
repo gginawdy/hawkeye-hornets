@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/submenu.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/bg3.jpeg') }}");
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: right 0px top;
+        }
+    </style>
+    <title>SMART CLASSROOM</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="menu-container">
+            <div class="menu-item Isi-Agenda-Guru">
+                <a href="/input">Isi Agenda Guru</a>
+            </div>
+            <div class="menu-item Data-Kehadiran-Guru">
+                <a href="/attendance">Data Kehadiran Guru</a>
+            </div>
+            <div class="menu-item Data-Kehadiran-Siswa">
+                <a href="/attendance_siswa">Data Kehadiran Siswa</a>
+            </div>
+        </div>
+        
+
+        <div class="kotak">
+            <a href="/menu">
+                <p>BACK</p>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

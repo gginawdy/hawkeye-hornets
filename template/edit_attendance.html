@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+        <style>
+            body {
+         background-image: url("{{ url_for('static', filename='images/bkg.jpg') }}");
+         background-size: 100%; /* Memperkecil gambar latar belakang */
+         background-repeat: no-repeat;
+         background-attachment: fixed;
+         background-position: right 0px top; /* Menggeser ke kiri 50 piksel dari kanan */
+     }
+         </style>
+        <title>SMART CLASSROOM</title>
+    </head>
+    <body>
+        <img src="{{ url_for('static', filename='images/c.jpg') }}" alt="logo" width="80px" />
+    <div class="container">
+        <h1>Edit Data Kehadiran Guru</h1>
+        <form method="POST" action="/update_attendance/{{ entry['_id'] }}">
+            <label for="date">Tanggal:</label>
+            <input type="date" id="date" name="date" value="{{ entry['date'] }}" required><br>
+    
+            <label for="name">Nama Guru:</label>
+            <select id="name" name="name" required>
+                {% for guru in guru_names %}
+                    <option value="{{ guru }}" {% if guru == entry['name'] %}selected{% endif %}>{{ guru }}</option>
+                {% endfor %}
+            </select><br>
+    
+            <label for="subject">Mata Pelajaran:</label>
+            <select id="subject" name="subject" required>
+                {% for mata_pelajaran in mata_pelajaran %}
+                    <option value="{{ mata_pelajaran }}" {% if mata_pelajaran == entry['subject'] %}selected{% endif %}>{{ mata_pelajaran }}</option>
+                {% endfor %}
+            </select><br>
+    
+            <label for="classroom">Kelas:</label>
+            <select id="classroom" name="classroom" required>
+                {% for kelas in kelas %}
+                    <option value="{{ kelas }}" {% if kelas == entry['classroom'] %}selected{% endif %}>{{ kelas }}</option>
+                {% endfor %}
+            </select><br>    
+    
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+    </div>    
+</body>
+</html>

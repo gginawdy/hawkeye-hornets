@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kipas.css') }}">
+    <style>
+        body {
+     background-image: url("{{ url_for('static', filename='images/bg3.jpeg') }}");
+     background-size: 100%; /* Memperkecil gambar latar belakang */
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+     background-position: right 0px top; /* Menggeser ke kiri 50 piksel dari kanan */
+ }
+ 
+     </style>
+    <title>SMART CLASSROOM</title>
+</head>
+
+<body>
+    <img src="{{ url_for('static', filename='images/c.jpg') }}" alt="logo" width="80px"/>
+    <div class="container">
+    <h1>Kontrol Kipas</h1>
+    <label for="fanSwitch">Thermometer:</label>
+
+<div class="widget">
+    <div id="widgetBox">
+        <iframe class="item" width="250px" height="250px" frameborder="0"
+            src="https://stem.ubidots.com/app/dashboards/public/widget/n2DJ6zraCJkvxZYYAQ5egHCTgZLe6E3XBpVtLGnZsoQ"></iframe>"></iframe>
+            <form method="POST">
+                <button type="submit" name="button" value="toggle" class="custom-button {% if current_value == 1 %}on{% endif %}">
+                    {% if current_value == 1 %}
+                    <img src="{{ url_for('static', filename='images/tombol.png') }}" alt="" width="40px" height="40px">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/tombol.png') }}" alt="" width="40px" height="40px">
+                    {% endif %}
+                </button>
+            </form>
+            <p>Current value: {{ current_value }}</p>
+        <a href="/menu">
+            <div class="kotak">
+            <p>BACK</p>
+            </div></a>
+    </div>
+</body>
+
+</html>

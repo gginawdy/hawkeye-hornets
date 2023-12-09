@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+     background-image: url("{{ url_for('static', filename='images/bkg.jpg') }}");
+     background-size: 100%; /* Memperkecil gambar latar belakang */
+     background-repeat: no-repeat;
+     background-attachment: fixed;
+     background-position: right 0px top; /* Menggeser ke kiri 50 piksel dari kanan */
+ }
+     </style>
+    <title>SMART CLASSROOM</title>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/c.jpg') }}" alt="logo" width="80px" />
+    <div class="container">
+        <h1>Data Kehadiran Guru</h1>
+
+        <!-- Dropdown untuk filter -->
+        <form method="get" action="/attendance">
+            <label for="filter_name">Nama Guru:</label>
+            <select id="filter_name" name="filter_name">
+                <option value="">Semua</option>
+                <option value="Ipit Ganda Permana, S.Pd">Ipit Ganda Permana, S.Pd</option>
+                <option value="Intan Rizkyani Sarah, ST">Intan Rizkyani Sarah, ST</option>
+                <option value="Tresna Yogaswara, S.Pd, MT">Tresna Yogaswara, S.Pd, MT</option>
+                <option value="Rismayanti Sasqia Putri, S.ST, ST">Rismayanti Sasqia Putri, S.ST, ST</option>
+                <option value="M. Asep Kurnia, S.Pd">M. Asep Kurnia, S.Pd</option>
+                <option value="Ir. Heru Subiantoro">Ir. Heru Subiantoro</option>
+            </select>
+        
+            <label for="filter_subject">Mata Pelajaran:</label>
+    <select id="filter_subject" name="filter_subject">
+                <option value="">Semua</option>
+                <option value="Sistem Transmisi">Sistem Transmisi</option>
+                <option value="Media Transmisi">Media Transmisi</option>
+                <option value="PRE">PRE</option>
+                <option value="SKDTKB">SKDTKB</option>
+                <option value="Sistem TV">Sistem TV</option>
+                <option value="PKK">PKK</option>
+            </select>
+        
+            <label for="filter_classroom">Kelas:</label>
+            <select id="filter_classroom" name="filter_classroom">
+                <option value="">Semua</option>
+                <option value="X - A">X - A</option>
+                <option value="X - B">X - B</option>
+                <option value="XI - A">XI - A</option>
+                <option value="XI - B">XI - B</option>
+                <option value="XII - A">XII - A</option>
+                <option value="XII - B">XII - B</option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+        <table>
+            <tr>
+                <th>Tanggal</th>
+                <th>Nama Guru</th>
+                <th>Mata Pelajaran</th>
+                <th>Kelas</th>
+                <th>Aksi</th> <!-- Tambahkan header kolom Aksi -->
+                <th>Edit</th> 
+            </tr>
+            {% for entry in data %}
+<tr>
+    <td>{{ entry['date'] }}</td>
+    <td>{{ entry['name'] }}</td>
+    <td>{{ entry['subject'] }}</td>
+    <td>{{ entry['classroom'] }}</td>
+    <td> {{ entry['Aksi'] }} <a href="/delete/{{ entry['_id'] }}">Hapus</a></td>
+    <td><a href="/edit/{{ entry['_id'] }}">Edit</a></td>
+</tr>
+{% endfor %}
+
+        </table>
+    </div>
+    <a href="/submenu">
+        <div class="kotak">
+            <p>BACK</p>
+        </div>
+    </a>
+</body>
+</html>

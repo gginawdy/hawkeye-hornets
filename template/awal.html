@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/awal.css') }}">
+    <style>
+       body {
+    background-image: url("{{ url_for('static', filename='images/bg.jpeg') }}");
+    background-size: 100%; /* Memperkecil gambar latar belakang */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: right 0px top; /* Menggeser ke kiri 50 piksel dari kanan */
+}
+    </style>
+    <title>SMART CLASSROOM</title>
+</head>
+<body>
+    <div class="container">
+        <h3>Welcome to <span style="color: rgb(247, 248, 248);"> Smart Classroom!</span></h3>
+        <div class="logo"> 
+            <img src="{{ url_for('static', filename='images/c.jpg') }}" alt="logo" width="250px"/>
+        </div>
+        <a href="/menu">
+            <div class="kotak">
+                <p>NEXT</p>
+            </div>
+        </a>                  
+    </div>
+</body>
+</html>
